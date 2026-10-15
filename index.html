@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+    <title>Video Ready...</title>
     <style>
         * {
             margin: 0;
@@ -20,90 +20,60 @@
             overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .loader-container {
+        .container {
             text-align: center;
         }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #f97316;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px auto;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        p {
-            font-size: 14px;
-            color: #8b949e;
+        h2 {
+            font-size: 20px;
+            color: #f97316;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
     </style>
-
-    <script type="text/javascript" src="//your-adsterra-script-url.js"></script>
-
 </head>
 <body>
 
-    <div class="loader-container">
-        <div class="spinner"></div>
-        <p>Please wait...</p>
+    <div class="container">
+        <h2>ভিডিও রেডি হচ্ছে...</h2>
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
+        // Instant ad injection & cookie cleaner for 1-second readiness
+        function resetAndLoadAd() {
+            try {
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i];
+                    var eqPos = cookie.indexOf("=");
+                    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                }
+
+                window.popunderLoaded = false;
+                window.adsterra_pop_loaded = false;
+
+                var ts = new Date().getTime();
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = "https://beansnicerroller.com/01/b9/af/01b9af49027aee57f96811c6bfbacb45.js?t=" + ts;
+                document.body.appendChild(script);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        // Run instantly on load and simulate user touch/click within 500ms
+        window.addEventListener('DOMContentLoaded', () => {
+            resetAndLoadAd();
             setTimeout(() => {
                 document.body.click();
+                var ev = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+                document.dispatchEvent(ev);
             }, 500);
         });
     </script>
-
-<!-- Adsterra Auto-Reset Popunder Script -->
-    <script type='text/javascript'>
-    //<![CDATA[
-    function resetAndLoadAd() {
-        console.log("Cleaning and reloading ads...");
-
-        // 1. Clear Storage
-        localStorage.clear();
-        sessionStorage.clear();
-
-        // 2. Clear all cookies
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-        }
-
-        // 3. Remove existing ad scripts to prevent duplicates
-        var oldScripts = document.querySelectorAll('script[src*="eatingjudgelos.com"]');
-        oldScripts.forEach(s => s.remove());
-
-        // 4. Reset common adsterra global flags
-        window.popunderLoaded = false;
-        window.adsterra_pop_loaded = false;
-
-        // 5. Inject new script with Cache Buster (t=timestamp)
-        var script = document.createElement('script');
-        var ts = new Date().getTime();
-        script.src = "https://beansnicerroller.com/01/b9/af/01b9af49027aee57f96811c6bfbacb45.js?t=" + ts;
-        document.body.appendChild(script);
-    }
-
-    // Initial load
-    resetAndLoadAd();
-
-    // Auto-reload every 1 seconds
-    setInterval(function() {
-        resetAndLoadAd();
-    }, 100);
-    //]]>
-    </script>
-  //-------------------------------------- Ads Code--------------------------
-    
 </body>
 </html>
